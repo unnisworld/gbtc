@@ -1,20 +1,33 @@
 package com.intuit.gbtc;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A simple implementation of Grid based traffic control system. This
- * implementation suggests the shortest possible path for a journey.
+ * Responsible for allocating the shortest possible path for a journey to a
+ * Vehicle.
  * 
- * Limitation : If the suggested path collides with an in-transit vehicle's path
- * it doesn't have the capability to find an alternative path which may be
- * slightly longer.
+ * Shortest possible path calculation strategy is dependent on the
+ * implementation of {@code PathCalculationStrategy} that is supplied to it
+ * during construction. The path thus obtained for a journey is checked for any
+ * possible collision with vehicles in transit using the
+ * {@code RouteConflictChecker}. If a conflict is detected, then an empty path
+ * is returned and vehicle is expected to retry after sometime.
+ * 
+ * Known Limitation : If the suggested path collides with an in-transit
+ * vehicle's path it doesn't have the capability to find an alternative path
+ * which may be slightly longer.
+ * 
+ * @ThreadSafe : This class is designed as a Thread Safe class. All methods in
+ *             this implementation are marked as synchronized as they either
+ *             mutate the internal state or depend on the internal state to
+ *             deliver correct results.
  * 
  * @author uvalsala
- *
+ * @see PathCalculationStrategy
+ * @see RouteConflictChecker
  */
 public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 
@@ -37,7 +50,8 @@ public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 	 *            destination
 	 * @return a List containing the route or empty list if route is not available.
 	 */
-	public List<Point> allocateRoute(String vehicleId, Point src, Point dest) {
+	@Override
+	public synchronized List<Point> allocateRoute(String vehicleId, Point src, Point dest) {
 		List<Point> route = pathCalculator.getPath(grid, src, dest);
 
 		if (routeConflitChecker.hasConflict(inTransitVehicles, route)) {
@@ -50,12 +64,14 @@ public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 		return route;
 	}
 
-	public void updateLocation(String vehicleId, Point oldLoc, Point newLoc) {
+	@Override
+	public synchronized void updateLocation(String vehicleId, Point oldLoc, Point newLoc) {
 		grid[newLoc.getX()][newLoc.getY()] = 1;
 		grid[oldLoc.getX()][oldLoc.getY()] = 0;
 	}
 
-	public void markJourneyAsDone(String vehicleId, Point oldLoc, Point newLoc) {
+	@Override
+	public synchronized void markJourneyComplete(String vehicleId, Point oldLoc, Point newLoc) {
 		// Update the vehicle location.
 		grid[newLoc.getX()][newLoc.getY()] = 1;
 		grid[oldLoc.getX()][oldLoc.getY()] = 0;
@@ -66,6 +82,6 @@ public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 	private int grid[][];
 	private PathCalculationStrategy pathCalculator;
 	private RouteConflictChecker routeConflitChecker;
-	private Map<String, List<Point>> inTransitVehicles = new ConcurrentHashMap<>();
+	private Map<String, List<Point>> inTransitVehicles = new HashMap<>();
 
 }

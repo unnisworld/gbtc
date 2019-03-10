@@ -1,5 +1,12 @@
 package com.intuit.gbtc;
 
+/**
+ * Default implementation of the {@code Configurator} interface.
+ * Responsible for instantiating an implementation of GridBasedTrafficControl.
+ * 
+ * @author uvalsala
+ *
+ */
 public class DefaultConfigurator implements Configurator {
 
 	@Override
