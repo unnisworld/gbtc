@@ -15,6 +15,6 @@ Instructions for running the program
 2. Import the maven project into Eclipse or Intellij
 3. Run GbtcClient.java
 
-Note on Scalability
+Note on Performance
 
 Lee's algorithm which is used to find the path between source and destination has a time complexity of O(MN). The collision detection routine has a time complexity of O(j * n), where j is the no. of journey's in progress and n is the average no. of Points to cover in a journey. So the total time to allocate a route to a vehicle is O(MN) + O(j * n).
