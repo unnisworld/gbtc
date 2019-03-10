@@ -4,10 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleRouteConflictChecker implements RouteConflictChecker {
+/**
+ * A simple implementation of CollisionDetectionStrategy.
+ * Does an intersection (A ∩ B)  of proposed route with routes of in-transit vehicles
+ * to determine whether there is a chance of collision.
+ * 
+ * @author uvalsala
+ *
+ */
+public class SimpleCollisionDetectionStrategy implements CollisionDetectionStrategy {
 
 	@Override
-	public boolean hasConflict(Map<String, List<Point>> inTransitVehicles, List<Point> route) {
+	public boolean canCollide(Map<String, List<Point>> inTransitVehicles, List<Point> route) {
 		for (Map.Entry<String, List<Point>> inTransitRoutes : inTransitVehicles.entrySet()) {
 			List<Point> inTransitRoute = inTransitRoutes.getValue();
 

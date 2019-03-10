@@ -33,9 +33,9 @@ public class GbtcClient {
 			        { 0, 0, 1, 1, 1, 1, 0, 1, 1, 0 } 
 			    };
 		
-		// Step 1: Obtain an instance of GridBasedTrafficControl.
-		Configurator cfg = new DefaultConfigurator();
-		GridBasedTrafficControl gbtc = cfg.getGridBasedTrafficControl(grid);
+        // Step 1: Obtain an instance of GridBasedTrafficControl.
+        Configurator cfg = new DefaultConfigurator();
+        GridBasedTrafficControl gbtc = cfg.getGridBasedTrafficControl(grid);
 		
 	    // Step 2: Obtain path for Journey-1.
 	    Point source1 = new Point(0, 0);

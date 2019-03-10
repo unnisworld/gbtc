@@ -27,12 +27,12 @@ import java.util.Map;
  * 
  * @author uvalsala
  * @see PathCalculationStrategy
- * @see RouteConflictChecker
+ * @see CollisionDetectionStrategy
  */
 public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 
 	public SimpleGridBasedTrafficControl(int grid[][], PathCalculationStrategy pathCalculator,
-			RouteConflictChecker routeConflitChecker) {
+			CollisionDetectionStrategy routeConflitChecker) {
 		this.grid = grid;
 		this.pathCalculator = pathCalculator;
 		this.routeConflitChecker = routeConflitChecker;
@@ -54,7 +54,7 @@ public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 	public synchronized List<Point> allocateRoute(String vehicleId, Point src, Point dest) {
 		List<Point> route = pathCalculator.getPath(grid, src, dest);
 
-		if (routeConflitChecker.hasConflict(inTransitVehicles, route)) {
+		if (routeConflitChecker.canCollide(inTransitVehicles, route)) {
 			System.err.println("Route allocation can result in collision. Please try after sometime.");
 			return Collections.emptyList();
 		}
@@ -81,7 +81,7 @@ public class SimpleGridBasedTrafficControl implements GridBasedTrafficControl {
 
 	private int grid[][];
 	private PathCalculationStrategy pathCalculator;
-	private RouteConflictChecker routeConflitChecker;
+	private CollisionDetectionStrategy routeConflitChecker;
 	private Map<String, List<Point>> inTransitVehicles = new HashMap<>();
 
 }

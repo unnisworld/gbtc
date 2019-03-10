@@ -2,6 +2,7 @@ package com.intuit.gbtc;
 
 /**
  * Represents a Point in 2-D plane.
+ * 
  * @author uvalsala
  *
  */

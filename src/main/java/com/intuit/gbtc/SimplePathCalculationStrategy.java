@@ -16,6 +16,7 @@ import java.util.Queue;
  */
 public class SimplePathCalculationStrategy implements PathCalculationStrategy {
 
+	@Override
 	public List<Point> getPath(int[][] grid, Point src, Point dest) {
 		int maxRow = grid.length;
 		int maxCol = grid[0].length;

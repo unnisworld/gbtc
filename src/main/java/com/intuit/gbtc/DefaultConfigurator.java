@@ -13,7 +13,7 @@ public class DefaultConfigurator implements Configurator {
 	public synchronized GridBasedTrafficControl getGridBasedTrafficControl(int grid[][]) {
 		if (gbtc == null) {
 			gbtc = new SimpleGridBasedTrafficControl(grid, new SimplePathCalculationStrategy(),
-					new SimpleRouteConflictChecker());
+					new SimpleCollisionDetectionStrategy());
 		}
 		
 		return gbtc;
