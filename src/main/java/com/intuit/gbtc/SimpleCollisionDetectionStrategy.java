@@ -1,8 +1,10 @@
 package com.intuit.gbtc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A simple implementation of CollisionDetectionStrategy.
@@ -16,10 +18,12 @@ public class SimpleCollisionDetectionStrategy implements CollisionDetectionStrat
 
 	@Override
 	public boolean canCollide(Map<String, List<Point>> inTransitVehicles, List<Point> route) {
+		
+		Set<Point> routeSet = new HashSet<>(route);
 		for (Map.Entry<String, List<Point>> inTransitRoutes : inTransitVehicles.entrySet()) {
 			List<Point> inTransitRoute = inTransitRoutes.getValue();
 
-			boolean hasConflit = hasConflit(inTransitRoute, route);
+			boolean hasConflit = hasConflit(inTransitRoute, routeSet);
 
 			if (hasConflit) {
 				return true;
@@ -29,12 +33,14 @@ public class SimpleCollisionDetectionStrategy implements CollisionDetectionStrat
 		return false;
 	}
 
-	private boolean hasConflit(List<Point> inTransitRoute, List<Point> route) {
-		List<Point> copy = new ArrayList<Point>(inTransitRoute);
-		copy.retainAll(route);
+	private boolean hasConflit(List<Point> inTransitRoute, Set<Point> routeSet) {
+		for(Point p : inTransitRoute) {
+			if (routeSet.contains(p)) {
+				return true;
+			}
+		}
 
-		// if intersection has elements
-		return copy.size() != 0 ? true : false;
+		return false;
 	}
 
 }
